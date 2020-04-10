@@ -35,6 +35,20 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
+#include "drive.hpp"
+#include "lift.hpp"
+#include "rollers.hpp"
+#include "tilter.hpp"
+#include "PIDController.hpp"
+
+void wait(int time)
+{
+  pros::delay(time);
+}
+
+extern pros::Controller master;
+extern pros::Imu inertial;
+extern int autonIndex;
 
 /**
  * You should add more #includes here

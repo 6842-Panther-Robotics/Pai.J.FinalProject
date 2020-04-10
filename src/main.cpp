@@ -16,6 +16,29 @@ void on_center_button() {
 	}
 }
 
+pros::ADIDigitalIn selector('C');
+int autonIndex = 0;
+
+void autonSelector(void* parameter){
+	const int autoCount = 2; //# of autonomouses
+	const char *autoNames[autoCount] = {
+		"Red Front Auton",//0
+		"Blue Front Auton"
+	};
+	while(true){
+		if(selector.get_value() == 1){
+			autonIndex ++;
+			if(autonIndex == autoCount){
+				autonIndex = 0;
+			}
+			//%s = print str
+			//%d = print int
+			//%f = print float
+			pros::lcd::print(4, "%s", autoNames[autonIndex]);
+			wait(1000);
+		}
+	}
+}
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -25,7 +48,7 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
+	pros::Task auton_selector(autonSelector);
 	pros::lcd::register_btn1_cb(on_center_button);
 }
 
@@ -58,7 +81,6 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -73,20 +95,13 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+pros::Controller master(pros::E_CONTROLLER_MASTER);
 void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
-
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
-
-		left_mtr = left;
-		right_mtr = right;
+		driveOP();
+		liftOP();
+		rollersOP();
+		tilterOP();
 		pros::delay(20);
 	}
 }
