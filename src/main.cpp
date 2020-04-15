@@ -46,6 +46,7 @@ void autonSelector(void* parameter){
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+	initializeInertialSensor();
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 	pros::Task auton_selector(autonSelector);

@@ -49,6 +49,17 @@ void timedDrive(int speed, int time)
   right(0);
   brake();
 }
+void initializeInertialSensor()
+{
+  inertial.reset();
+
+  int time = pros::millis();
+  int iter = 0;
+  while(inertial.is_calibrating()){
+    iter+=10;
+    wait(10);
+  }
+}
 //Functions
 
 void move(int inches)
