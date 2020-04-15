@@ -48,7 +48,7 @@ void autonSelector(void* parameter){
 void initialize() {
 	initializeInertialSensor();
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "Good Morning ______ how may I serve you!");
 	pros::Task auton_selector(autonSelector);
 	pros::lcd::register_btn1_cb(on_center_button);
 }
